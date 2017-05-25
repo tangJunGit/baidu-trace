@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> 
+    <title>百度鹰眼</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="static/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="static/bootstrap/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="static/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="static/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="static/icheck-1.x/square/blue.css">
+    <link rel="stylesheet" type="text/css" href="static/css/common.css">
+</head>
+<body>
+    <div class="Manager_content">
+        <div class="main">
+            <div class="trunk">
+                <div class="trackControl visible">
+                    <!--  地图  -->
+                    <div class="map" id="mapContainer"></div>
+                    <!--  左边框  -->
+                    <div class="manage">
+                        <div class="manageControl">
+                            <!-- 标题  -->
+                            <div class="manageTop">
+                                <div class="serviceName">ChangHongLoving管理</div>
+                                <div class="toggleInManage" data-toggle="collapse" data-target="#manageBottom"></div>
+                            </div>
+                            <!--  内容  -->
+                            <div class="collapse in">
+                                <div class="manageBottom">
+                                    <!--  切换的tab  -->
+                                    <div class="manageTab">
+                                        <div class="monitorTab">实时监控
+                                            <div class="monitorTabIcon"></div>
+                                        </div>
+                                        <div class="trackTab">轨迹查询
+                                            <div class="trackTabIcon"></div>
+                                        </div>
+                                        <div class="pointerTabRight"></div>
+                                    </div>
+                                    <!--  轨迹查询  -->
+                                    <div class="track visible">
+                                        <!--  时间选择  -->
+                                        <div class="trackDatetime">
+                                            <div class="input-append date" id="datetimepicker">
+                                                <input type="text" class="datetimeInput" id="datetimeInput" value="" size="16" -date-format="yyyy-mm-dd">
+                                                <span class="add-on datetimeBtn"><i class="icon-th"></i></span>
+                                            </div>
+                                        </div>
+                                        <!--  搜索  -->
+                                        <div class="trackSearch">
+                                            <input class="searchInputMonitor" id="searchInputMonitor" placeholder="请输入关键字">
+                                            <img src="static/images/searchicon_2x.png" class="searchBtnMonitor" id="searchBtnMonitor">
+                                            <div class="lineMonitor"></div>
+                                            <img src="static/images/clearsearch_2x.png" class="clearSearchBtnMonitor hideCommon" id="clearSearchBtnMonitor">
+                                        </div>
+                                        <!--  列表  -->
+                                        <div class="trackContent">
+                                            <div class="monitorFrame" id="trackList"></div>
+                                            <div class="monitorPage">
+                                                <div class="jumpPage">
+                                                    <input type="text" class="inputPage" id="inputPage" value="1">
+                                                    <span class="pageNumber">/ <span id="allPage">0</span>页</span>
+                                                    <span class="goPage" id="goPage">GO</span>
+                                                </div>
+                                                <div class="switchPage">
+                                                    <span class="lastPageOff" id="prevPage"></span>
+                                                    <span class="nextPageOff" id="nextPage"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--轨迹时间线-->
+                    <div class="timeline visible">
+                        <div class="timelineControl">
+                            <div class="timelinePlay" id="timelinePlay"></div>
+                            <div class="timelineSlow" id="timelineSlow"></div>
+                            <div class="timelineQuick" id="timelineQuick"></div>
+                        </div>
+                        <div class="timelineMain" id="timelineMain">
+                            <div class="timelineProgress" id="timelineProgress"></div>
+                            <div class="runPart" id="runPart"></div>
+                            <div class="timelineLabel blank" id="timelineLabel" >
+                                <div class="timelineLabelcontent">0:0</div>
+                                <div class="timelineLabelpointer"></div>
+                            </div>
+                            <div class="caliperA" id="caliperA">
+                                <div class="caliperLine"></div>
+                                <div class="caliperPointerA" id="caliperPointerA"></div>
+                            </div>
+                            <div class="caliperB" id="caliperB">
+                                <div class="caliperLine"></div>
+                                <div class="caliperPointerB" id="caliperPointerB"></div>
+                            </div>
+                            <div class="caliperPartA"  id="caliperPartA"></div>
+                            <div class="caliperPartB"  id="caliperPartB"></div>
+                        </div>
+                    </div>
+
+                    <!--轨迹纠偏，驾驶行为分析-->
+                    <div class="trackAnalysis visible">
+                        <div class="trackAnalysisHeader">
+                            <div class="analysisHeaderTitle1Off analysisTitle">轨迹纠偏</div>
+                            <div class="analysisHeaderPointOffDown analysis"></div>
+                            <div class="analysisHeaderLine"></div>
+                            <div class="analysisHeaderTitle2Off analysisTitle">驾驶行为分析</div>
+                            <div class="analysisHeaderPointOffDown analysis"></div>
+                        </div>
+                        <div class="trackAnalysisProcess trackPanel hidden">
+                            <div class="processClose closePanel"></div>
+                            <div class="processTile">轨迹纠偏</div>
+                            <div class="processSwitchOff" ></div>
+                            <div class="processControl">
+                                <div class="processControlItem">
+                                    <input type="checkbox" id="denoise" checked disabled/>
+                                    <label for="denoise">去噪</label>
+                                </div>
+                                <div class="processControlItem">
+                                    <input type="checkbox" id="vacuate" checked disabled/>
+                                    <label for="vacuate">抽稀</label>
+                                </div>
+                                <div class="processControlItem">
+                                    <input type="checkbox" id="mapmatch" disabled/>
+                                    <label for="mapmatch">绑路</label>
+                                </div>
+                            </div>
+                            <div class="processControl">
+                                <div class="optionsTitle">交通方式</div>
+                                <div class="trafficMethodItem">
+                                    <input type="radio" name="trafficMethod" id="byCar" checked disabled/>
+                                    <label for="byCar">驾车</label>
+                                </div>
+                                <div class="trafficMethodItem">
+                                    <input type="radio" name="trafficMethod" id="byBike" disabled/>
+                                    <label for="byBike">骑行</label>
+                                </div>
+                                <div class="trafficMethodItem">
+                                    <input type="radio" name="trafficMethod" id="byWalk" disabled/>
+                                    <label for="byWalk">步行</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="trackAnalysisBehavior trackPanel hidden">
+                            <div class="behaviorClose closePanel"></div>
+                            <div class="behaviorTile">驾驶行为分析</div>
+                            <div class="behaviorSwitchOff"></div>
+                            <div class="behaviorControl">
+                                <div class="behaviorControlItem">
+                                    <div class="controlItemNumOff controlItemNum">0</div>
+                                    <div class="controlItemBot">
+                                        <input type="checkbox" id="speeding" disabled/>
+                                        <label for="speeding">超速</label>
+                                    </div>
+                                </div>
+                                <div class="controlItemLine"></div>
+                                <div class="behaviorControlItem">
+                                    <div class="controlItemNumOff controlItemNum">0</div>
+                                    <div class="controlItemBot">
+                                        <input type="checkbox" id="acceleration" disabled/>
+                                        <label for="acceleration">急变速</label>
+                                    </div>
+                                </div>
+                                <div class="controlItemLine"></div>
+                                <div class="behaviorControlItem">
+                                    <div class="controlItemNumOff controlItemNum">0</div>
+                                    <div class="controlItemBot">
+                                        <input type="checkbox" id="steering" disabled/>
+                                        <label for="steering">急转弯</label>
+                                    </div>
+                                </div>
+                                <div class="controlItemLine"></div>
+                                <div class="behaviorControlItem">
+                                    <div class="controlItemNumOff controlItemNum">0</div>
+                                    <div class="controlItemBot">
+                                        <input type="checkbox" id="staypoint" disabled/>
+                                        <label for="staypoint">停留</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="static/javascript/baiduTemplate.js"></script>
+    <script id="bt-track-list" type="text/html">
+        <%for(var i=0,len=list.length;i<len;i++){%>
+            <div class="monitorListItem<%=list[i].style%>" data-name="<%=list[i].name%>"> 
+                <div class="monitorListItemName">
+                    <abbr title="<%=list[i].name%>"><%=list[i].name%></abbr>
+                </div>
+                <div class="monitorListItemSpeed"><%=list[i].distance?list[i].distance:0%> km</div>
+            </div>
+        <%}%>
+    </script>    
+    <script id="bt-timeline" type="text/html">
+        <%for(var i=0,len=timeCount.length;i<len;i++){%>
+            <div class="timeHour<%=i==0?' timeHourFirst':''%><%=i==len-1?' timeHourFinal':''%>"></div>
+        <%}%>
+        <%for(var j=0,len=timeNumber.length;j<len;j++){%>
+            <div class="timeNumber" style="left: <%=j*29.5-1%>px;"><%=j%></div>
+        <%}%>
+    </script>
+    
+    <script type="text/javascript" src="static/javascript/jquery.min.js"></script>
+    <script type="text/javascript" src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="static/bootstrap/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="static/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"  charset="UTF-8"></script>
+    <script type="text/javascript" src="static/icheck-1.x/icheck.min.js"></script>
+    <script type="text/javascript" src="script/common/mapControl.js"></script>
+    <script type="text/javascript" src="script/common/commonfun.js"></script>
+    <script type="text/javascript" src="script/trackcontrol/trackcontrol.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=7LntySARQN3f2r5vFSG0DPIMruapmAT5&callback=mapControl.initMap"></script>
+</body>
+</html>
