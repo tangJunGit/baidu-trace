@@ -2,6 +2,7 @@ $(function(){
     var bt = baidu.template,                // baidu.template
         service_id = getQueryString('service_id'),   // service_id
         ak = getQueryString('ak'),                   // ak
+        sign = 0;     //判断是否访问过
         url = 'http://yingyan.baidu.com/api/v3',     // 请求地址
         url2 = 'http://api.map.baidu.com/geocoder/v2',     
         url3 = 'http://yingyan.baidu.com/api/v2',   
@@ -15,8 +16,6 @@ $(function(){
         $trackList = $('#trackList'),           // track列表
         $prevPage = $('#prevPage'),          // 上一页
         $nextPage = $('#nextPage'),       // 下一页
-        $monitorListItems = null,   // track实体列表
-        $monitorListItems0 = null,   // track有轨迹实体列表
         $timelineMain = $('#timelineMain'),         // 时间线容器
         $timelinePlay = $('#timelinePlay'),       // 暂停播放按钮
         $timelineProgress = $('#timelineProgress'),       // 时间轴进度条
@@ -65,6 +64,7 @@ $(function(){
                 'walking'
             ],
             trackList: [],              // 当前track列表
+            trackIndex: '',              // 当前实体index
             currentTrackPageIndex: 1,     // 当前track页码
             searchQuery: '',              // 查询关键字
             trackPageTotal: 0,           //track总页数
@@ -128,18 +128,30 @@ $(function(){
     .on('changeDate', function() {
         onGetTracklist(1);
     });
+    /**
+     * tab
+     */
+    $('.trackTab').on('click', function(){
+        init();
+    });
     
     /**
      * 初始化
      */
     function init(){
         onGetTracklist(track.currentTrackPageIndex);
-        initTimeLine();
-        initTrackAnalysis();
-        addEvent();
-        initSpeedControl();
+        if(sign == 0){
+            initTimeLine();
+            initTrackAnalysis();
+            addEvent();
+            initSpeedControl();
+        }else{
+            if(!track.trackIndex) return;
+            mapControl.showSpeedControl();
+            $trackList.find('.monitorListItem0').eq(track.trackIndex).click();
+        }
+        sign = 1;
     }
-    init();
     
     /**
      * 监听事件
@@ -189,12 +201,13 @@ $(function(){
 
         // 点击track实体
         $trackList.on('click', '.monitorListItem1, .monitorListItem0', function(){
-            $monitorListItems.removeClass('monitorSelect');
+            $trackList.find('.monitorListItem0, .monitorListItem1').removeClass('monitorSelect');
             $(this).addClass('monitorSelect');
         });
 
         $trackList.on('click', '.monitorListItem0', function(){
             var name = $(this).attr('data-name');
+            track.trackIndex = $trackList.index($(this));
             onSelecttrack(name);
         });
 
@@ -239,6 +252,7 @@ $(function(){
             parmas = {
                 service_id: service_id,
                 ak: ak,
+                timeStamp: new Date().getTime(),
                 query: track.searchQuery,
                 page_size: track.size,
                 page_index: track.currentTrackPageIndex,
@@ -343,8 +357,7 @@ $(function(){
             }
         });
         $trackList.html(bt('bt-track-list',{"list": track.trackList}));
-        $monitorListItems = $('.monitorListItem0, .monitorListItem1');
-        $monitorListItems0 = $('.monitorListItem0');
+        $('.monitorListItem0').eq(track.trackIndex).addClass('monitorSelect')
     }
 
 
@@ -1292,9 +1305,7 @@ $(function(){
 
     // ======================== 轨迹纠偏，驾驶行为分析
      function initSpeedControl() {
-        setTimeout(function(){
-            mapControl.showSpeedControl();
-        },3000);
+        mapControl.showSpeedControl();
     }
 
     function initTrackAnalysis(){
@@ -1526,6 +1537,7 @@ $(function(){
             var newParams = {
                 'service_id': paramsr.service_id,
                 'ak': paramsr.ak,
+                'timeStamp': new Date().getTime(),
                 'entity_name': paramsr.entity_name,
                 'start_time': paramsr.start_time,
                 'end_time': paramsr.end_time,
@@ -1637,6 +1649,7 @@ $(function(){
             var newParams = {
                 'service_id': paramsr.service_id,
                 'ak': paramsr.ak,
+                'timeStamp': new Date().getTime(),
                 'entity_name': paramsr.entity_name,
                 'start_time': paramsr.start_time,
                 'end_time': paramsr.end_time,
@@ -1778,6 +1791,7 @@ $(function(){
             output: 'json',
             service_id: service_id,
             ak: ak,
+            timeStamp: new Date().getTime(),
         };
 
         $.ajax({

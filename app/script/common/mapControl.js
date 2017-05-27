@@ -30,6 +30,7 @@ window.mapControl = {
         document.getElementsByTagName('head')[0].appendChild(mapvScript);
         mapvScript.onload = function () {
             that.initBoundsearch();
+            initMonitor();           // 监控初始化
         };
         window.map = new BMap.Map("mapContainer", {enableMapClick: false});    // 创建Map实例
         map.centerAndZoom(new BMap.Point(116.404, 39.915), 10);  // 初始化地图,设置中心点坐标和地图级别
@@ -539,7 +540,7 @@ window.mapControl = {
             }
         );
         this.monitorInfoBox.addEventListener('close', function (e) {
-            TrackAction.closemonitorinfobox();
+            onClosemonitorinfobox();
         });
         this.monitorInfoBox.open(this.entityMarker);
         $('#monitorInfoZoomIn').click(function (e) {
@@ -765,7 +766,7 @@ window.mapControl = {
                         if (item === null) {
                             return;
                         }
-                        TrackAction.selectcar(item.entity_name, item.entity_status, '');
+                        onSelectcar(item.entity_name, item.entity_status, '');
                     }
                 },
                 size: 20,

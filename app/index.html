@@ -24,23 +24,52 @@
                             <!-- 标题  -->
                             <div class="manageTop">
                                 <div class="serviceName">ChangHongLoving管理</div>
-                                <div class="toggleInManage" data-toggle="collapse" data-target="#manageBottom"></div>
+                                <div class="toggleInManage" id="toggleInManage"></div>
                             </div>
                             <!--  内容  -->
                             <div class="collapse in">
                                 <div class="manageBottom">
                                     <!--  切换的tab  -->
-                                    <div class="manageTab">
+                                    <div class="manageTab visible">
                                         <div class="monitorTab">实时监控
                                             <div class="monitorTabIcon"></div>
                                         </div>
                                         <div class="trackTab">轨迹查询
                                             <div class="trackTabIcon"></div>
                                         </div>
-                                        <div class="pointerTabRight"></div>
+                                        <div class="pointerTabLeft" id="pointerTab"></div>
+                                    </div>
+                                    <!--实时监控-->
+                                    <div class="monitor visible">
+                                        <div class="monitorSearch">
+                                            <input class="searchInputMonitor" placeholder="请输入关键字" id="searchInputMonitor2">
+                                            <img src="static/images/searchicon.png" class="searchBtnMonitor"  id="searchBtnMonitor2">
+                                            <div class="lineMonitor"></div>
+                                            <img src="static/images/clearsearch.png" class="clearSearchBtnMonitor hideCommon" id="clearSearchBtnMonitor2">
+                                        </div>
+                                        <div class="monitorList">
+                                            <div class="monitorAll monitorTab2">全部<span></span></div>
+                                            <div class="monitorOnline monitorTab2">在线<span></span></div>
+                                            <div class="monitorOffline monitorTab2">离线<span></span></div>
+                                            <div class="monitorBottomLineLeft"></div>
+                                        </div>
+                                        <div class="monitorAllContent visible">
+                                            <div class="monitorFrame" id="monitorList"></div>
+                                            <div class="monitorPage">
+                                                <div class="jumpPage">
+                                                    <input type="text" class="inputPage" id="inputPage2" value="1">
+                                                    <span class="pageNumber">/ <span id="allPage2">0</span>页</span>
+                                                    <span class="goPage" id="goPage2">GO</span>
+                                                </div>
+                                                <div class="switchPage">
+                                                    <span class="lastPageOff" id="prevPage2"></span>
+                                                    <span class="nextPageOn" id="nextPage2"></span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <!--  轨迹查询  -->
-                                    <div class="track visible">
+                                    <div class="track hidden">
                                         <!--  时间选择  -->
                                         <div class="trackDatetime">
                                             <div class="input-append date" id="datetimepicker">
@@ -76,7 +105,7 @@
                         </div>
                     </div>
                     <!--轨迹时间线-->
-                    <div class="timeline visible">
+                    <div class="timeline hidden">
                         <div class="timelineControl">
                             <div class="timelinePlay" id="timelinePlay"></div>
                             <div class="timelineSlow" id="timelineSlow"></div>
@@ -103,7 +132,7 @@
                     </div>
 
                     <!--轨迹纠偏，驾驶行为分析-->
-                    <div class="trackAnalysis visible">
+                    <div class="trackAnalysis hidden">
                         <div class="trackAnalysisHeader">
                             <div class="analysisHeaderTitle1Off analysisTitle">轨迹纠偏</div>
                             <div class="analysisHeaderPointOffDown analysis"></div>
@@ -185,7 +214,12 @@
                             </div>
                         </div>
                     </div>
-                    
+                    <!--视野设备数量-->
+                    <div class="boundcontrol visible">
+                        <div class="boundsearch_title">全部显示</div>
+                        <div class="boundOff" id="boundBtn"></div>
+                        <div class="boundsearch_total">当前视野设备数量：<span>0</span></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -209,6 +243,17 @@
             <div class="timeNumber" style="left: <%=j*29.5-1%>px;"><%=j%></div>
         <%}%>
     </script>
+    <script id="bt-monitor-list" type="text/html">
+        <%for(var i=0,len=list.length;i<len;i++){%>
+            <div class="monitorListItem monitorListItem<%=list[i][2]%>" data-entity_name="<%=list[i][0]%>" data-entity_desc="<%=list[i][4]%>"
+                data-entity_status="<%=list[i][2]%>" data-entity_id="<%=list[i][3]%>"> 
+                <div class="monitorListItemName">
+                    <abbr title="<%=list[i][0]%>"><%=list[i][0]%></abbr>
+                </div>
+                <div class="monitorListItemSpeed"><%=list[i][1]%></div>
+            </div>
+        <%}%>
+    </script>
     
     <script type="text/javascript" src="static/javascript/jquery.min.js"></script>
     <script type="text/javascript" src="static/bootstrap/js/bootstrap.min.js"></script>
@@ -217,7 +262,8 @@
     <script type="text/javascript" src="static/icheck-1.x/icheck.min.js"></script>
     <script type="text/javascript" src="script/common/mapControl.js"></script>
     <script type="text/javascript" src="script/common/commonfun.js"></script>
-    <script type="text/javascript" src="script/trackcontrol/trackcontrol.js"></script>
+    <script type="text/javascript" src="script/control/monitor.js"></script>
+    <script type="text/javascript" src="script/control/trackcontrol.js"></script>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=7LntySARQN3f2r5vFSG0DPIMruapmAT5&callback=mapControl.initMap"></script>
 </body>
 </html>
